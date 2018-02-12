@@ -20,7 +20,7 @@ namespace CefSharp.MinimalExample.WinForms
             Text = "CefSharp";
             WindowState = FormWindowState.Maximized;
 
-            browser = new ChromiumWebBrowser("www.google.com")
+            browser = new ChromiumWebBrowser("test://index.html")
             {
                 Dock = DockStyle.Fill,
             };
@@ -35,6 +35,11 @@ namespace CefSharp.MinimalExample.WinForms
             var bitness = Environment.Is64BitProcess ? "x64" : "x86";
             var version = String.Format("Chromium: {0}, CEF: {1}, CefSharp: {2}, Environment: {3}", Cef.ChromiumVersion, Cef.CefVersion, Cef.CefSharpVersion, bitness);
             DisplayOutput(version);
+
+            //CefSharpSettings.LegacyJavascriptBindingEnabled = true;
+            //browser.RegisterJsObject("boundObjLegacy", new BoundClass1());
+            //browser.JavascriptObjectRepository.Register("boundObj", new BoundClass1(), false);
+            browser.JavascriptObjectRepository.Register("boundObjAsync", new BoundClass1(), isAsync: true);
         }
 
         private void OnBrowserConsoleMessage(object sender, ConsoleMessageEventArgs args)

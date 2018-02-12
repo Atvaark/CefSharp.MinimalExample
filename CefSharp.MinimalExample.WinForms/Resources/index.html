@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+<ul id ="state"></ul>
+</body>
+<script type="text/javascript">
+    //(async function() {
+    //    const ul = document.getElementById('state');
+    //    const append = (text) => {
+    //        var li = document.createElement("li");
+    //        li.appendChild(document.createTextNode(text));
+    //        ul.appendChild(li);
+    //    }
+
+    //    const response1 = boundObjLegacy.stringProperty;
+    //    append("response1: " + response1);
+
+    //    const response2 = boundObjLegacy.stringMethod();
+    //    append("response2: " + response2);
+    
+    //    //const response3 = boundObjLegacy.objectMethod();
+    //    //append("response3: " + response3);
+
+    //    const response3 = boundObjLegacy.objectProperty;
+    //    append("response3: " + response3);
+
+    //    const response4 = response3.stringProperty;
+    //    append("response4: " + response4);
+
+    //    try {
+    //        const response5 = response3.stringMethod();
+    //        append("response5: " + response5);
+    //    } catch (e) {
+    //        append("response5 (error): " + e);
+    //    } 
+    //})();
+
+    //(async function() {
+    //    const ul = document.getElementById('state');
+    //    const append = (text) => {
+    //        var li = document.createElement("li");
+    //        li.appendChild(document.createTextNode(text));
+    //        ul.appendChild(li);
+    //    }
+    //    const response0 = await CefSharp.BindObjectAsync("boundObj");
+          
+    //    const response1 = boundObj.stringProperty;
+    //    append("response1: " + response1);
+          
+    //    const response2 = boundObj.stringMethod();
+    //    append("response2: " + response2);
+          
+    //    const response3 = boundObj.objectMethod();
+    //    append("response3: " + response3);
+
+    //    //const response3 = boundObj.objectProperty;
+    //    //append("response3: " + response3);
+          
+    //    const response4 = response3.stringProperty;
+    //    append("response4: " + response3);
+          
+    //    const response5 = response3.stringMethod();
+    //    append("response5: " + response3);
+    //})();
+
+    (async function() {
+        const ul = document.getElementById('state');
+        const append = (text) => {
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(text));
+            ul.appendChild(li);
+        };
+
+        await window.CefSharp.BindObjectAsync('boundObjAsync', 'bound2');
+        append('typeof window.boundObjAsync === \'object\': ' + (typeof window.boundObjAsync === 'object'));
+        
+        const response1 = await window.boundObjAsync.stringMethod();
+        append('await boundObjAsync.stringMethod(): ' + response1);
+
+        const response2 = window.boundObjAsync.stringProperty === undefined;
+        append('boundObjAsync.stringProperty === undefined: ' + response2);
+    
+        const response3Promise = window.boundObjAsync.objectMethod();
+        append('boundObjAsync.objectMethod(): ' + response3Promise);
+    
+        window.setInterval(function() {
+            console.log(response3Promise); // prints "Promise {<pending>}"
+        }, 1000);
+
+        response3Promise.then(async response3 => {
+                // never runs
+                append('response3Promise.then(): ' + response3);
+
+                const response4 = await response3.stringMethod();
+                append('await response3.stringMethod(): ' + response4);
+            }).catch(response3Error => {
+                // never runs
+                append('response3Promise.catch(): ' + response3Error);
+            });
+    })();
+</script>
+</html>

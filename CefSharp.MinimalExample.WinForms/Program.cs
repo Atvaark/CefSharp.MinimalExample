@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using CefSharp.SchemeHandler;
 
 namespace CefSharp.MinimalExample.WinForms
 {
@@ -22,6 +23,12 @@ namespace CefSharp.MinimalExample.WinForms
                 CachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CefSharp\\Cache")
             };
 
+            settings.RegisterScheme(new CefCustomScheme
+            {
+                SchemeName = "test",
+                SchemeHandlerFactory = new FolderSchemeHandlerFactory("Resources")
+            });
+            
             //Perform dependency check to make sure all relevant resources are in our output directory.
             Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
 
